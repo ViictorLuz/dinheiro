@@ -1,0 +1,74 @@
+﻿@model Dinheiro.Models.Meta
+
+@{
+    ViewData["Title"] = "Detalhes da Meta";
+    var valorAtualCalculado = Model.Aportes?.Sum(a => a.Valor) ?? 0;
+    var progresso = Model.ValorAlvo > 0 ? (valorAtualCalculado / Model.ValorAlvo) * 100 : 0;
+    progresso = Math.Min(progresso, 100);
+}
+
+<h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">@Model.Titulo</h1>
+<p class="text-gray-600 dark:text-gray-400 mb-6">Acompanhe o progresso para alcançar seu objetivo.</p>
+
+<div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+    <div class="flex justify-between items-center mb-2">
+        <span class="text-lg font-semibold text-gray-700 dark:text-gray-200">Progresso</span>
+        <span class="text-lg font-bold text-green-500 dark:text-green-400">@progresso.ToString("F0")%</span>
+    </div>
+    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4">
+        <div class="bg-green-500 h-4 rounded-full" style="width: @progresso.ToString("F0")%"></div>
+    </div>
+    <div class="text-right text-gray-600 dark:text-gray-400 mt-2">
+        <span class="font-semibold">@valorAtualCalculado.ToString("C")</span> de <span class="font-semibold">@Model.ValorAlvo.ToString("C")</span>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="md:col-span-1">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Adicionar Novo Aporte</h2>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <form asp-action="AdicionarAporte">
+                <input type="hidden" name="MetaId" value="@Model.Id" />
+                <div class="mb-4">
+                    <label for="Valor" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Valor do Aporte</label>
+                    <input type="text" name="Valor" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+                </div>
+                <div class="mb-4">
+                    <label for="Data" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data do Aporte</label>
+                    <input type="date" name="Data" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+                </div>
+                <div class="mt-6">
+                    <input type="submit" value="Salvar Aporte" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 focus:outline-none focus:shadow-outline" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="md:col-span-2">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Histórico de Aportes</h2>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                @if (Model.Aportes != null && Model.Aportes.Any())
+                {
+                    @foreach (var aporte in Model.Aportes.OrderByDescending(a => a.Data))
+                    {
+                        <li class="py-3 flex justify-between items-center">
+                            <span class="text-gray-700 dark:text-gray-300">@aporte.Data.ToString("dd/MM/yyyy")</span>
+                            <span class="font-semibold text-green-500 dark:text-green-400">+ @aporte.Valor.ToString("C")</span>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="py-3 text-center text-gray-500 dark:text-gray-400">Nenhum aporte registrado.</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="mt-8">
+    <a asp-action="Index" class="inline-block align-baseline font-bold text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">
+        &larr; Voltar para a Lista de Metas
+    </a>
+</div>

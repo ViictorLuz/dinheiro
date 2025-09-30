@@ -1,0 +1,36 @@
+﻿@model Dinheiro.Models.Transacao
+
+@{
+    ViewData["Title"] = "Detalhes da Transação";
+}
+
+<h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Detalhes da Transação</h1>
+
+<div>
+    <hr class="mb-4 border-gray-200 dark:border-gray-700" />
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+        <dl class="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-8">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Descricao)</dt>
+            <dd class="text-lg text-gray-900 dark:text-gray-100 md:col-span-3">@Html.DisplayFor(model => model.Descricao)</dd>
+
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Valor)</dt>
+            <dd class="text-lg font-semibold md:col-span-3 @(Model.Tipo == Dinheiro.Models.TipoTransacao.Receita ? "text-green-500 dark:text-green-400" : "text-red-500 dark:text-red-400")">@Model.Valor.ToString("C")</dd>
+
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Data)</dt>
+            <dd class="text-lg text-gray-900 dark:text-gray-100 md:col-span-3">@Model.Data.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Tipo)</dt>
+            <dd class="text-lg text-gray-900 dark:text-gray-100 md:col-span-3">@Html.DisplayFor(model => model.Tipo)</dd>
+
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Categoria)</dt>
+            <dd class="text-lg text-gray-900 dark:text-gray-100 md:col-span-3">@Html.DisplayFor(model => model.Categoria.Titulo)</dd>
+
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">@Html.DisplayNameFor(model => model.Conta)</dt>
+            <dd class="text-lg text-gray-900 dark:text-gray-100 md:col-span-3">@Html.DisplayFor(model => model.Conta.Nome)</dd>
+        </dl>
+    </div>
+</div>
+<div class="mt-6 flex items-center space-x-4">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105">Editar</a>
+    <a asp-action="Index" class="inline-block align-baseline font-bold text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">Voltar para a Lista</a>
+</div>

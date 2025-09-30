@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Dinheiro.Models.Conta>
+
+@{
+    ViewData["Title"] = "Suas Contas";
+}
+
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Suas Contas</h1>
+    <p class="text-gray-600 dark:text-gray-400">Gerencie suas contas correntes, cartões e carteira.</p>
+</div>
+
+<p class="mb-4">
+    <a asp-action="Create" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105">
+        Criar Nova Conta
+    </a>
+</p>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nome</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Saldo Inicial</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tipo</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Ações</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            @foreach (var item in Model)
+            {
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-gray-100">@item.Nome</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300">@item.SaldoInicial.ToString("C")</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300">@item.Tipo</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="text-indigo-500 hover:text-indigo-400">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id" class="text-gray-500 hover:text-gray-400">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-500 hover:text-red-400">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Dinheiro.Models.Transacao>
+@using Dinheiro.Models
+
+@{
+    ViewData["Title"] = "Relatórios";
+
+    var totalReceitas = Model.Where(t => t.Tipo == TipoTransacao.Receita).Sum(t => t.Valor);
+    var totalDespesas = Model.Where(t => t.Tipo == TipoTransacao.Despesa).Sum(t => t.Valor);
+    var saldoPeriodo = totalReceitas - totalDespesas;
+}
+
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Relatório de Transações</h1>
+</div>
+
+
+<div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8">
+    <form asp-controller="Relatorios" asp-action="Index" method="get" class="flex flex-col md:flex-row items-center gap-4">
+        <div class="flex-1 w-full">
+            <label for="dataInicio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Início</label>
+            <input type="date" name="dataInicio" id="dataInicio" value="@ViewData["dataInicio"]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+        <div class="flex-1 w-full">
+            <label for="dataFim" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Data de Fim</label>
+            <input type="date" name="dataFim" id="dataFim" value="@ViewData["dataFim"]" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+        <div class="pt-5 self-end">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105">
+                Buscar
+            </button>
+        </div>
+    </form>
+</div>
+
+@if (Model.Any())
+{
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total de Receitas</div>
+            <div class="text-3xl font-bold text-green-500 dark:text-green-400">@totalReceitas.ToString("C")</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Total de Despesas</div>
+            <div class="text-3xl font-bold text-red-500 dark:text-red-400">@totalDespesas.ToString("C")</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase">Saldo do Período</div>
+            <div class="text-3xl font-bold @(saldoPeriodo >= 0 ? "text-blue-500 dark:text-blue-400" : "text-red-500 dark:text-red-400")">@saldoPeriodo.ToString("C")</div>
+        </div>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Transações Encontradas</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Descrição</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Valor</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Data</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Categoria</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach (var item in Model)
+                {
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">@item.Descricao</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium @(item.Tipo == TipoTransacao.Receita ? "text-green-500 dark:text-green-400" : "text-red-500 dark:text-red-400")">
+                            @(item.Tipo == TipoTransacao.Receita ? "+ " : "- ") @item.Valor.ToString("C")
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300">@item.Data.ToString("dd/MM/yyyy")</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300">@item.Categoria.Titulo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
+        <p class="text-gray-500 dark:text-gray-400">Nenhuma transação encontrada para o período selecionado.</p>
+    </div>
+}

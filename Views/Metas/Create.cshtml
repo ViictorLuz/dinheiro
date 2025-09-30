@@ -1,0 +1,35 @@
+﻿@model Dinheiro.Models.Meta
+
+@{
+    ViewData["Title"] = "Nova Meta";
+}
+
+<h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Criar Nova Meta</h1>
+<hr class="mb-6 border-gray-200 dark:border-gray-700" />
+
+<div class="max-w-lg bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
+    <form asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+        <div class="mb-4">
+            <label asp-for="Titulo" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2"></label>
+            <input asp-for="Titulo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="Titulo" class="text-red-500 text-sm"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="ValorAlvo" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Valor Alvo</label>
+            <input asp-for="ValorAlvo" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="ValorAlvo" class="text-red-500 text-sm"></span>
+        </div>
+        <div class="mb-4">
+            <label asp-for="DataFinalPrevista" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Data Final Prevista (opcional)</label>
+            <input asp-for="DataFinalPrevista" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 leading-tight focus:outline-none focus:shadow-outline" />
+            <span asp-validation-for="DataFinalPrevista" class="text-red-500 text-sm"></span>
+        </div>
+        <div class="flex items-center justify-between mt-6">
+            <input type="submit" value="Salvar" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 focus:outline-none focus:shadow-outline" />
+            <a asp-action="Index" class="inline-block align-baseline font-bold text-sm text-gray-600 dark:text-gray-400 hover:text-blue-500">
+                Voltar para a Lista
+            </a>
+        </div>
+    </form>
+</div>
